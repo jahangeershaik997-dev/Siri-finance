@@ -1,14 +1,16 @@
 import Link from "next/link";
-import { COMPANY } from "@/lib/constants";
+import { COMPANY, COMPANY_EMAIL_RECIPIENT } from "@/lib/constants";
 
 const quickLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
   { href: "/services", label: "Services" },
   { href: "/apply", label: "Apply Now" },
+  { href: "/get-info", label: "Get info" },
   { href: "/contact", label: "Contact Us" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms" },
+  { href: "/admin/login", label: "Staff login" },
 ];
 
 const serviceLinks = [
@@ -99,7 +101,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href={`mailto:${COMPANY.email}`} className="hover:text-white">
+                <a href={`mailto:${COMPANY_EMAIL_RECIPIENT}`} className="hover:text-white">
                   ✉️ {COMPANY.email}
                 </a>
               </li>
@@ -110,6 +112,8 @@ export function Footer() {
       </div>
       <div className="bg-primary-red py-3 text-center text-sm text-white">
         © 2025 Siri Financial Services. All Rights Reserved. | Managed by {COMPANY.contactPerson}
+        {" · "}
+        <Link href="/admin/login" className="underline hover:no-underline">Staff login</Link>
       </div>
     </footer>
   );

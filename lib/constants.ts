@@ -1,3 +1,8 @@
+/** Canonical site URL for OG, sitemap, robots. Set NEXT_PUBLIC_SITE_URL in Vercel (e.g. https://sirifinancialservices.com or https://siri-finance.vercel.app). */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://sirifinancialservices.com";
+
+/** Display email shown on site. Actual mailto and form recipient use COMPANY_EMAIL_RECIPIENT. */
 export const COMPANY = {
   name: "Siri Financial Services",
   shortName: "SFS",
@@ -11,6 +16,28 @@ export const COMPANY = {
   contactPerson: "M. Mallesh",
   mapCoords: { lat: 17.4375, lng: 78.4483 },
 };
+
+/** All mailto links and email routing send to this address. Display text stays COMPANY.email. */
+export const COMPANY_EMAIL_RECIPIENT = process.env.COMPANY_EMAIL_RECIPIENT || "malleshmuthyala5@gmail.com";
+
+/** Only these emails can access Users (grant/revoke, add user). Both use password 123456789; seed via /admin/setup. */
+export const SUPER_ADMIN_EMAILS = ["jahangeershaik997@gmail.com", "malleshmuthyala5@gmail.com"] as const;
+export const SUPER_ADMIN_DISPLAY_NAMES: Record<string, string> = {
+  "jahangeershaik997@gmail.com": "Jahangeer",
+  "malleshmuthyala5@gmail.com": "Mallesh",
+};
+
+/** Formspree form ID for hero form (works on Vercel) */
+export const FORMSPREE_HERO_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_HERO_FORM_ID || "meellnqq";
+export const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_HERO_FORM_ID}`;
+
+/** Formspree form ID for Contact page (use same or create a separate form in Formspree) */
+export const FORMSPREE_CONTACT_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID || "meellnqq";
+export const FORMSPREE_CONTACT_ENDPOINT = `https://formspree.io/f/${FORMSPREE_CONTACT_FORM_ID}`;
+
+/** Formspree form ID for Apply (multi-step) – use same or create "Apply" form in Formspree */
+export const FORMSPREE_APPLY_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_APPLY_FORM_ID || "meellnqq";
+export const FORMSPREE_APPLY_ENDPOINT = `https://formspree.io/f/${FORMSPREE_APPLY_FORM_ID}`;
 
 export const BANKS_PARTNERS = [
   "SBI",
@@ -32,6 +59,28 @@ export const BANKS_PARTNERS = [
   "Canara Bank",
   "Union Bank",
 ];
+
+/** Bank branding colors for trust banner (logo-accurate) */
+export const BANK_BRAND_COLORS: Record<string, { bg: string; text: string }> = {
+  "SBI": { bg: "#002E6E", text: "#FFFFFF" },
+  "HDFC Bank": { bg: "#004C8B", text: "#FFFFFF" },
+  "ICICI Bank": { bg: "#E65C00", text: "#FFFFFF" },
+  "Axis Bank": { bg: "#801E26", text: "#FFFFFF" },
+  "Kotak Mahindra": { bg: "#D4142A", text: "#FFFFFF" },
+  "Yes Bank": { bg: "#0066B3", text: "#FFFFFF" },
+  "IndusInd Bank": { bg: "#C4122E", text: "#FFFFFF" },
+  "Federal Bank": { bg: "#003366", text: "#FFFFFF" },
+  "Bajaj Finserv": { bg: "#E31937", text: "#FFFFFF" },
+  "Tata Capital": { bg: "#0066B3", text: "#FFFFFF" },
+  "L&T Finance": { bg: "#0E4C92", text: "#FFFFFF" },
+  "Muthoot Finance": { bg: "#FFB81C", text: "#1A1A1A" },
+  "Manappuram": { bg: "#C4122E", text: "#FFFFFF" },
+  "IDFC First": { bg: "#E31937", text: "#FFFFFF" },
+  "PNB": { bg: "#D4142A", text: "#FFFFFF" },
+  "Bank of Baroda": { bg: "#E65C00", text: "#FFFFFF" },
+  "Canara Bank": { bg: "#FFB81C", text: "#1A1A1A" },
+  "Union Bank": { bg: "#C4122E", text: "#FFFFFF" },
+};
 
 export const LOAN_TYPE_SLUGS = [
   "personal-loan",

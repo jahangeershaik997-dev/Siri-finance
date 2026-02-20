@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
-import { COMPANY } from "@/lib/constants";
+import { COMPANY, COMPANY_EMAIL_RECIPIENT, FORMSPREE_CONTACT_ENDPOINT } from "@/lib/constants";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
 
 const subjects = [
@@ -25,19 +25,47 @@ export default function ContactPage() {
   const onSubmit = async (data: ContactFormValues) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/leads", {
+      // Formspree: messages go to your Formspree dashboard (and email if you set it in Formspree)
+      const res = await fetch(FORMSPREE_CONTACT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: "service-page",
-          fullName: data.name,
-          mobileNumber: data.phone,
-          email: data.email,
-          purpose: `Contact form: ${data.subject} - ${data.message}`,
+          name: data.name,
+          phone: data.phone,
+          email: data.email || "",
+          subject: data.subject,
+          message: data.message,
+          _subject: `Contact: ${data.subject} - Siri Finance`,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to send");
+      await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formType: "contact",
+          data: {
+            name: data.name,
+            phone: data.phone,
+            email: data.email || "",
+            subject: data.subject,
+            message: data.message,
+          },
+        }),
+      }).catch(() => {});
+      // Also send to WhatsApp (if CallMeBot is set up)
+      const whatsappMsg = `*Contact Form - Siri Finance*\nName: ${data.name}\nPhone: ${data.phone}\nSubject: ${data.subject}\nMessage: ${data.message}`;
+      fetch("/api/send-to-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: whatsappMsg }),
+      })
+        .then((r) => r.json())
+        .then((body) => {
+          if (body.skipped || !body.success) console.warn("[WhatsApp]", body.skipped ? "Skipped (set CALLMEBOT_API_KEY in Vercel/env)" : body.error);
+        })
+        .catch(() => {});
       toast.success("Message sent. We will get back to you soon!");
       form.reset();
     } catch (e) {
@@ -139,7 +167,7 @@ export default function ContactPage() {
                 </a>
               </p>
               <p className="mt-2">
-                <a href={`mailto:${COMPANY.email}`} className="text-primary-blue underline">
+                <a href={`mailto:${COMPANY_EMAIL_RECIPIENT}`} className="text-primary-blue underline">
                   {COMPANY.email}
                 </a>
               </p>

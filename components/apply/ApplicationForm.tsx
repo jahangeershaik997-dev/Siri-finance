@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { applyFormSchema, type ApplyFormValues } from "@/lib/validations";
-import { getUTMParams } from "@/lib/utils";
+import { getUTMParams, generateReferenceNumber } from "@/lib/utils";
+import { FORMSPREE_APPLY_ENDPOINT } from "@/lib/constants";
 import { ProgressBar } from "./ProgressBar";
 import { Step1LoanDetails } from "./Step1LoanDetails";
 import { Step2PersonalDetails } from "./Step2PersonalDetails";
@@ -105,26 +106,66 @@ export function ApplicationForm({
 
   const onFormSubmit = async (data: ApplyFormValues) => {
     setIsSubmitting(true);
+    const ref = generateReferenceNumber();
     try {
       const utm = typeof window !== "undefined" ? getUTMParams() : {};
-      const payload = {
-        ...data,
+      const whatsappNumber = data.whatsappSameAsMobile ? data.mobileNumber : data.whatsappNumber;
+      const formspreePayload: Record<string, string | number | boolean | undefined> = {
+        _subject: `SFS Apply: ${data.fullName} - ${data.loanType}`,
+        referenceNumber: ref,
         source: "apply-page",
+        fullName: data.fullName,
+        mobileNumber: data.mobileNumber,
+        whatsappNumber,
+        email: data.email,
+        loanCategory: data.loanCategory,
+        loanType: data.loanType,
+        loanAmount: data.loanAmount,
+        city: data.city,
+        state: data.state,
+        employmentType: data.employmentType,
+        companyName: data.companyName,
+        monthlySalary: data.monthlySalary,
+        cibilScore: data.cibilScore,
+        consentContact: data.consentContact === true || data.consentContact === "true" || data.consentContact === "on",
+        consentTerms: data.consentTerms === true || data.consentTerms === "true" || data.consentTerms === "on",
         existingLoans: data.existingLoans === "true" || data.existingLoans === true,
         propertyOwned: data.propertyOwned === "true" || data.propertyOwned === true,
-        whatsappNumber:
-          data.whatsappSameAsMobile ? data.mobileNumber : data.whatsappNumber,
         ...utm,
       };
-      const res = await fetch("/api/leads", {
+      const res = await fetch(FORMSPREE_APPLY_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formspreePayload),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed to submit");
+      let json: { error?: string; errors?: { message: string }[] };
+      try {
+        json = await res.json();
+      } catch {
+        throw new Error("Network error. Please check your connection and try again.");
+      }
+      if (!res.ok) {
+        const msg = json?.error || (Array.isArray(json?.errors) ? json.errors.map((e: { message: string }) => e.message).join(". ") : null) || "Failed to submit. Please try again.";
+        throw new Error(msg);
+      }
+      await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formType: "apply", data: formspreePayload }),
+      }).catch(() => {});
+      const whatsappMsg = `*New Application (SFS)*\nRef: ${ref}\nName: ${data.fullName}\nPhone: ${data.mobileNumber}\nLoan: ${data.loanType}\nAmount: ${data.loanAmount}\nCity: ${data.city}`;
+      fetch("/api/send-to-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: whatsappMsg }),
+      })
+        .then((r) => r.json())
+        .then((body) => {
+          if (body.skipped || !body.success) console.warn("[WhatsApp]", body.skipped ? "Skipped (set CALLMEBOT_API_KEY in Vercel/env)" : body.error);
+        })
+        .catch(() => {});
       setSubmitted({
-        ref: json.referenceNumber,
+        ref,
         name: data.fullName || "Applicant",
         loanType: data.loanType || "",
         loanAmount: data.loanAmount || "",

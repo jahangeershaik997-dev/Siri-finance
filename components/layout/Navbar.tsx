@@ -42,36 +42,30 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="relative flex h-10 w-10 items-center justify-center">
-            <svg viewBox="0 0 48 48" className="h-10 w-10">
-              <circle
-                cx="24"
-                cy="24"
-                r="22"
-                fill="none"
-                stroke="#1565C0"
-                strokeWidth="2"
-                strokeDasharray="4 2"
-              />
-              <circle
-                cx="24"
-                cy="24"
-                r="18"
-                fill="none"
-                stroke="#E53935"
-                strokeWidth="1.5"
-                strokeDasharray="3 4"
-              />
+        {/* Logo - SFS with circular swoosh (brand: blue, red, green) */}
+        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Siri Financial Services Home">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+            <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
+              <defs>
+                <linearGradient id="nav-arc-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#1565C0" />
+                  <stop offset="100%" stopColor="#1976D2" />
+                </linearGradient>
+                <linearGradient id="nav-arc-red" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#E53935" />
+                  <stop offset="100%" stopColor="#FF6F00" />
+                </linearGradient>
+              </defs>
+              <circle cx="24" cy="24" r="20" fill="none" stroke="url(#nav-arc-blue)" strokeWidth="2" strokeLinecap="round" strokeDasharray="28 20" transform="rotate(-50 24 24)" />
+              <circle cx="24" cy="24" r="14" fill="none" stroke="url(#nav-arc-red)" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="20 16" transform="rotate(25 24 24)" />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center font-poppins font-bold text-sm">
+            <span className="absolute inset-0 flex items-center justify-center font-poppins text-base font-bold leading-none">
               <span className="text-[#1565C0]">S</span>
               <span className="text-[#E53935]">F</span>
               <span className="text-[#2E7D32]">S</span>
             </span>
           </div>
-          <span className="hidden text-sm font-bold text-sfs-text-primary sm:block lg:text-base">
+          <span className="hidden font-poppins text-sm font-bold text-sfs-text-primary sm:block lg:text-base">
             SIRI FINANCIAL SERVICES
           </span>
         </Link>
@@ -154,7 +148,7 @@ export function Navbar() {
           )}
         </nav>
 
-        {/* Right: WhatsApp + Apply */}
+        {/* Right: Phone, Staff login, Apply */}
         <div className="flex items-center gap-3">
           <a
             href={`tel:${COMPANY.phone}`}
@@ -164,6 +158,12 @@ export function Navbar() {
             <span className="text-primary-green">📞</span>
             <span className="font-medium">{COMPANY.phone}</span>
           </a>
+          <Link
+            href="/admin/login"
+            className="hidden text-sm font-medium text-sfs-text-secondary hover:text-primary-red sm:block"
+          >
+            Staff login
+          </Link>
           <Link
             href="/apply"
             className="hidden rounded-lg bg-primary-red px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600 sm:block"
@@ -251,6 +251,14 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <hr />
+              <Link
+                href="/admin/login"
+                onClick={() => setMobileOpen(false)}
+                className="font-medium text-sfs-text-secondary"
+              >
+                Staff login
+              </Link>
             </div>
           </motion.div>
         )}

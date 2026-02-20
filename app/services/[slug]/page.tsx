@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServiceBySlug, getRelatedServices } from "@/data/services";
 import { SectionTitle } from "@/components/shared/SectionTitle";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: { slug: string };
@@ -10,6 +11,17 @@ interface PageProps {
 export async function generateStaticParams() {
   const { servicesList } = await import("@/data/services");
   return servicesList.map((s) => ({ slug: s.slug }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const service = getServiceBySlug(params.slug);
+  if (!service) return { title: "Service" };
+  const desc = service.description.slice(0, 160);
+  return {
+    title: service.title,
+    description: desc + (service.description.length > 160 ? "…" : ""),
+    openGraph: { title: service.title, description: desc },
+  };
 }
 
 export default function ServiceDetailPage({ params }: PageProps) {

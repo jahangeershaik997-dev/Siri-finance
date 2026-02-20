@@ -94,8 +94,8 @@ export const step4Schema = z.object({
   preferredContactTime: z.string().optional(),
   hearAboutUs: z.string().optional(),
   referralCode: z.string().optional(),
-  consentContact: z.union([z.boolean(), z.literal("true")]).refine((v) => v === true || v === "true", "You must agree to be contacted"),
-  consentTerms: z.union([z.boolean(), z.literal("true")]).refine((v) => v === true || v === "true", "You must agree to Terms & Privacy Policy"),
+  consentContact: z.union([z.boolean(), z.string()]).refine((v) => v === true || v === "true" || v === "on", "You must agree to be contacted"),
+  consentTerms: z.union([z.boolean(), z.string()]).refine((v) => v === true || v === "true" || v === "on", "You must agree to Terms & Privacy Policy"),
   consentSoftCheck: z.union([z.boolean(), z.literal("true")]).optional(),
 });
 

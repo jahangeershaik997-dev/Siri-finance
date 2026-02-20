@@ -1,1 +1,14 @@
-{"name":"Siri Financial Services","short_name":"SFS","start_url":"/","display":"standalone","theme_color":"#E53935"}
+{
+  "name": "Siri Financial Services",
+  "short_name": "SFS",
+  "description": "Loans, home loan, personal loan in Hyderabad",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#E53935",
+  "background_color": "#0f172a",
+  "icons": [
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

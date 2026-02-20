@@ -5,7 +5,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingButtons } from "@/components/layout/FloatingButtons";
 import { Toaster } from "sonner";
-import { COMPANY } from "@/lib/constants";
+import { COMPANY, SITE_URL } from "@/lib/constants";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 
 const poppins = Poppins({
   weight: ["600", "700"],
@@ -20,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sirifinancialservices.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Siri Financial Services | Loans, Home Loan, Personal Loan in Hyderabad",
     template: "%s | Siri Financial Services",
@@ -54,6 +55,14 @@ export default function RootLayout({
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#E53935" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SFS" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-152x152.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -61,7 +70,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: COMPANY.name,
-              image: "/images/logo-og.png",
+              image: `${SITE_URL}/images/logo-og.png`,
               address: {
                 "@type": "PostalAddress",
                 streetAddress: COMPANY.address,
@@ -79,11 +88,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
+        <SessionProvider>
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingButtons />
         <Toaster position="top-center" richColors closeButton />
+        </SessionProvider>
       </body>
     </html>
   );

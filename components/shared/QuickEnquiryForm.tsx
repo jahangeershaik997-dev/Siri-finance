@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { heroFormSchema, type HeroFormValues } from "@/lib/validations";
-import { HERO_LOAN_TYPES, LOAN_AMOUNT_OPTIONS } from "@/lib/constants";
+import { HERO_LOAN_TYPES, LOAN_AMOUNT_OPTIONS, FORMSPREE_ENDPOINT } from "@/lib/constants";
 import { useState } from "react";
 
 export function QuickEnquiryForm() {
@@ -23,25 +23,51 @@ export function QuickEnquiryForm() {
   const onSubmit = async (data: HeroFormValues) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/leads", {
+      // Formspree works on Vercel (file-based /api/leads does not)
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: "hero-form",
           fullName: data.fullName,
           mobileNumber: data.mobileNumber,
           loanType: data.loanType,
           loanAmount: data.loanAmount,
           city: data.city,
+          _subject: "Get Free Loan Consultation - Siri Finance",
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed to submit");
+      if (!res.ok) throw new Error(json.error || "Failed to save lead");
+      await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formType: "hero",
+          data: {
+            fullName: data.fullName,
+            mobileNumber: data.mobileNumber,
+            loanType: data.loanType,
+            loanAmount: data.loanAmount,
+            city: data.city,
+          },
+        }),
+      }).catch(() => {});
+      // Also send summary to WhatsApp (if CallMeBot is set up)
+      const whatsappMsg = `*New Loan Enquiry (Website)*\nName: ${data.fullName}\nPhone: ${data.mobileNumber}\nLoan: ${data.loanType}\nAmount: ${data.loanAmount}\nCity: ${data.city}`;
+      fetch("/api/send-to-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: whatsappMsg }),
+      })
+        .then((r) => r.json())
+        .then((body) => {
+          if (body.skipped || !body.success) console.warn("[WhatsApp]", body.skipped ? "Skipped (set CALLMEBOT_API_KEY in Vercel/env)" : body.error);
+        })
+        .catch(() => {});
       toast.success("We'll contact you shortly with loan options!");
-      // Reset form after success
       reset({ city: "Hyderabad" });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Something went wrong");
+      toast.error(e instanceof Error ? e.message : "Failed to save lead");
     } finally {
       setLoading(false);
     }
