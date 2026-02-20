@@ -125,7 +125,7 @@ export function ApplicationForm({
         state: data.state,
         employmentType: data.employmentType,
         companyName: data.companyName,
-        monthlySalary: data.monthlySalary,
+        monthlySalary: data.monthlyIncome,
         cibilScore: data.cibilScore,
         consentContact: data.consentContact === true || data.consentContact === "true" || data.consentContact === "on",
         consentTerms: data.consentTerms === true || data.consentTerms === "true" || data.consentTerms === "on",
