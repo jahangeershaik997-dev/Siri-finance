@@ -21,7 +21,7 @@ export const contactFormSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
-export const step1Schema = z.object({
+const step1BaseSchema = z.object({
   loanCategory: z.enum(["loans", "credit-cards", "insurance"]),
   loanType: z.string().min(1, "Select loan type"),
   loanAmount: z.string().optional(),
@@ -30,7 +30,9 @@ export const step1Schema = z.object({
   existingLoans: z.union([z.boolean(), z.literal("true"), z.literal("false")]).optional(),
   existingLoansCount: z.number().optional(),
   existingEMI: z.number().optional(),
-}).refine(
+});
+
+export const step1Schema = step1BaseSchema.refine(
   (data) => {
     if (data.loanCategory === "loans" && !data.loanAmount) return false;
     return true;
@@ -97,7 +99,7 @@ export const step4Schema = z.object({
   consentSoftCheck: z.union([z.boolean(), z.literal("true")]).optional(),
 });
 
-export const applyFormSchema = step1Schema
+export const applyFormSchema = step1BaseSchema
   .merge(step2Schema)
   .merge(step3Schema)
   .merge(step4Schema)
