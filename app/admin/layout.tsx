@@ -8,7 +8,12 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (e) {
+    console.error("Admin layout getServerSession error:", e);
+  }
   return (
     <div className="min-h-screen bg-sfs-bg-light">
       {session && (
