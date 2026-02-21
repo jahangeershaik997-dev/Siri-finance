@@ -11,6 +11,7 @@ interface Step4Props {
   errors: FieldErrors<ApplyFormValues>;
   onEditStep: (step: number) => void;
   isSubmitting: boolean;
+  onSubmit?: () => void;
 }
 
 export function Step4ReviewSubmit({
@@ -19,6 +20,7 @@ export function Step4ReviewSubmit({
   errors,
   onEditStep,
   isSubmitting,
+  onSubmit,
 }: Step4Props) {
   const values = watch();
 
@@ -119,7 +121,14 @@ export function Step4ReviewSubmit({
       </div>
       <button
         type="submit"
+        form="apply-form"
         disabled={isSubmitting}
+        onClick={(e) => {
+          if (onSubmit) {
+            e.preventDefault();
+            onSubmit();
+          }
+        }}
         className="w-full rounded-lg bg-primary-green py-4 text-lg font-semibold text-white transition hover:bg-green-700 disabled:opacity-70"
       >
         {isSubmitting ? "Submitting..." : "Submit Application and Get Offers"}

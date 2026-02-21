@@ -198,7 +198,7 @@ export function ApplicationForm({
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
+    <form id="apply-form" onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
       <ProgressBar currentStep={step} />
       <AnimatePresence mode="wait">
         {step === 1 && (
@@ -286,6 +286,7 @@ export function ApplicationForm({
               errors={errors}
               onEditStep={setStep}
               isSubmitting={isSubmitting}
+              onSubmit={() => form.handleSubmit(onFormSubmit)()}
             />
             <div className="mt-6 flex justify-start">
               <button type="button" onClick={onBack} className="text-primary-red hover:underline">
