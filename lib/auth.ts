@@ -58,4 +58,6 @@ export const authOptions: NextAuthOptions = {
   },
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   secret: process.env.NEXTAUTH_SECRET,
-};
+  // Required on Vercel so NextAuth trusts the request host (fixes "server configuration" error)
+  trustHost: true,
+} as unknown as NextAuthOptions;
