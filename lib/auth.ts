@@ -1,4 +1,5 @@
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, User, Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getUserByEmail, verifyPassword, isSuperAdmin } from "@/lib/db/users";
 
@@ -32,7 +33,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role;
@@ -42,7 +43,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         (session.user as { id?: string }).id = token.id as string;
         (session.user as { role?: string }).role = token.role as string;
