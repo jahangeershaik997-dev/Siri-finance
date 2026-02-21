@@ -3,6 +3,14 @@ import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getUserByEmail, verifyPassword, isSuperAdmin } from "@/lib/db/users";
 
+// On Vercel, ensure NEXTAUTH_URL is set so auth works in production (fixes "server configuration" error)
+if (typeof process !== "undefined" && process.env.VERCEL && process.env.VERCEL_URL) {
+  const url = process.env.NEXTAUTH_URL?.trim();
+  if (!url || url.startsWith("http://localhost")) {
+    process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
