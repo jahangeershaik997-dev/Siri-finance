@@ -16,7 +16,9 @@ export function Hero() {
     );
     const el = heroRef.current;
     if (el) observer.observe(el);
-    return () => el && observer.unobserve(el);
+    return () => {
+      if (el) observer.unobserve(el);
+    };
   }, []);
 
   return (
