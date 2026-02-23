@@ -39,6 +39,7 @@ export const NAV_LINKS = [
   { href: "/#services", label: "Work" },
   { href: "/#services", label: "Study" },
   { href: "/#countries", label: "Visa" },
+  { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact Us" },
 ];
 
@@ -140,6 +141,7 @@ export const FOOTER_ABOUT = [
   { href: "/", label: "Home" },
   { href: "/#about", label: "About Us" },
   { href: "/services", label: "Services" },
+  { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -166,3 +168,20 @@ export const FOOTER_SOCIAL = [
 ];
 
 export const TESTIMONIALS_YOUTUBE_URL = "https://www.youtube.com";
+
+/** Resource / download files with country flag before file name. Add files to public/documents/ and set filePath. */
+export const RESOURCE_FILES = [
+  { country: "USA", flag: "🇺🇸", fileName: "DS160 FORM by team.docx", filePath: "/documents/USA-DS160-FORM-by-team.docx", slug: "usa-ds160" },
+  { country: "USA", flag: "🇺🇸", fileName: "US Visa Checklist.pdf", filePath: "/documents/USA-Visa-Checklist.pdf", slug: "usa-checklist" },
+  { country: "Canada", flag: "🇨🇦", fileName: "DS160 FORM by team.docx", filePath: "/documents/Canada-DS160-FORM-by-team.docx", slug: "canada-ds160" },
+  { country: "Canada", flag: "🇨🇦", fileName: "Canada Visa Guide.pdf", filePath: "/documents/Canada-Visa-Guide.pdf", slug: "canada-guide" },
+  { country: "Australia", flag: "🇦🇺", fileName: "DS160 FORM by team.docx", filePath: "/documents/Australia-DS160-FORM-by-team.docx", slug: "aus-ds160" },
+  { country: "Australia", flag: "🇦🇺", fileName: "Student Visa Checklist.pdf", filePath: "/documents/Australia-Student-Visa-Checklist.pdf", slug: "aus-student" },
+  { country: "UK", flag: "🇬🇧", fileName: "DS160 FORM by team.docx", filePath: "/documents/UK-DS160-FORM-by-team.docx", slug: "uk-ds160" },
+  { country: "UK", flag: "🇬🇧", fileName: "UK Visa Application Guide.pdf", filePath: "/documents/UK-Visa-Application-Guide.pdf", slug: "uk-guide" },
+  { country: "Germany", flag: "🇩🇪", fileName: "DS160 FORM by team.docx", filePath: "/documents/Germany-DS160-FORM-by-team.docx", slug: "de-ds160" },
+  { country: "UAE", flag: "🇦🇪", fileName: "DS160 FORM by team.docx", filePath: "/documents/UAE-DS160-FORM-by-team.docx", slug: "uae-ds160" },
+  { country: "Singapore", flag: "🇸🇬", fileName: "DS160 FORM by team.docx", filePath: "/documents/Singapore-DS160-FORM-by-team.docx", slug: "sg-ds160" },
+  { country: "New Zealand", flag: "🇳🇿", fileName: "DS160 FORM by team.docx", filePath: "/documents/NewZealand-DS160-FORM-by-team.docx", slug: "nz-ds160" },
+  { country: "Ireland", flag: "🇮🇪", fileName: "DS160 FORM by team.docx", filePath: "/documents/Ireland-DS160-FORM-by-team.docx", slug: "ie-ds160" },
+];
