@@ -68,7 +68,17 @@ export default function AdminLoginPage() {
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
             />
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && (
+            <>
+              <p className="text-sm text-red-600">{error}</p>
+              <p className="text-sm text-sfs-text-secondary">
+                First time?{" "}
+                <Link href="/admin/setup" className="text-primary-red underline hover:no-underline">
+                  Create your admin at /admin/setup
+                </Link>
+              </p>
+            </>
+          )}
           <button
             type="submit"
             disabled={loading}

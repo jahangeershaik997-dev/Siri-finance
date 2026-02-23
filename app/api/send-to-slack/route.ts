@@ -1,20 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
-/** POST: send form data to Slack webhook. Set SLACK_WEBHOOK_URL in Vercel env. */
-export async function POST(request: NextRequest) {
-  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
-  if (!webhookUrl) {
-    return NextResponse.json({ ok: false, skipped: true, reason: "SLACK_WEBHOOK_URL not set" }, { status: 200 });
-  }
+/** Normalize reference consultant to env key (e.g. "General / Office" -> "GENERAL_OFFICE") */
+function refToEnvKey(ref: string): string {
+  return ref.trim().replace(/\s+/g, "_").replace(/\//g, "_").toUpperCase();
+}
 
+/** POST: send form data to Slack. Uses consultant-specific webhook when set (e.g. SLACK_WEBHOOK_URL_MOHAN). */
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { source = "form", data = {} } = body;
 
+    const ref =
+      (data["Reference Consultant"] ?? data["Reference Consultant (Whose client is this?)"]) as string | undefined;
+    const refKey = ref ? refToEnvKey(ref) : null;
+    const consultantWebhook =
+      refKey && process.env[`SLACK_WEBHOOK_URL_${refKey}` as keyof typeof process.env];
+    const webhookUrl = (typeof consultantWebhook === "string" ? consultantWebhook : null) || process.env.SLACK_WEBHOOK_URL;
+
+    if (!webhookUrl) {
+      return NextResponse.json({ ok: false, skipped: true, reason: "SLACK_WEBHOOK_URL not set" }, { status: 200 });
+    }
+
     const entries = Object.entries(data).filter(([, v]) => v != null && v !== "");
     const text = entries.map(([k, v]) => `${k}: ${v}`).join("\n");
     const payload = {
-      text: `*${source.toUpperCase()} submission*\n\`\`\`\n${text || "(no data)"}\n\`\`\``,
+      text: `*${source.toUpperCase()} submission*${ref ? ` (${ref})` : ""}\n\`\`\`\n${text || "(no data)"}\n\`\`\``,
     };
 
     const res = await fetch(webhookUrl, {

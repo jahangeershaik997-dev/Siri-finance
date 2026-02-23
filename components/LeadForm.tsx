@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import {
-  FORMSPREE_LEAD_ENDPOINT,
+  getFormspreeLeadEndpoint,
   LEAD_FORM_I_AM,
   LEAD_FORM_I_WANT,
   DS160_REFERENCE,
@@ -73,7 +73,8 @@ export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "
       _subject: `Whizzfly Lead: ${data.iAm ?? ""} - ${data.iWant ?? ""}`,
     };
     try {
-      const res = await fetch(FORMSPREE_LEAD_ENDPOINT, {
+      const endpoint = getFormspreeLeadEndpoint(data.referenceConsultant);
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

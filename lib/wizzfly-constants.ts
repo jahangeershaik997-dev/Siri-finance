@@ -16,19 +16,19 @@ export const COMPANY = {
   mapCoords: { lat: 17.385, lng: 78.4867 },
 };
 
-/** Senior consultants / advisors - Call or WhatsApp (all 4 shown on homepage) */
+/** Senior consultants / advisors - Call or WhatsApp (all 4 shown on homepage). Mujju = Mujaheed. */
 export const SENIOR_CONSULTANTS = [
   { name: "Yogesh", phone: "9603434162", whatsapp: "919603434162", email: "yogeshvishwakarma959@gmail.com", role: "Senior Consultant" },
   { name: "Mohan", phone: "7097427161", whatsapp: "917097427161", email: "mohankanna51@gmail.com", role: "Senior Advisor" },
-  { name: "Eshwar", phone: "7013193257", whatsapp: "917013193257", phone2: "9010018469", email: "", role: "Senior Consultant" },
+  { name: "Mujaheed", phone: COMPANY.phone, whatsapp: COMPANY.whatsapp, email: COMPANY.email, role: "Senior Consultant" },
   { name: "General / Office", phone: COMPANY.phone, whatsapp: COMPANY.whatsapp, email: COMPANY.email, role: "Office" },
 ];
 
-/** Reference consultant options for all forms – shows in Formspree/Telegram so you know whose client it is */
+/** Reference consultant options for all forms – Formspree/Slack/Telegram route to the selected consultant. */
 export const REFERENCE_CONSULTANT_OPTIONS = [
   "Yogesh",
   "Mohan",
-  "Eshwar",
+  "Mujaheed",
   "General / Office",
 ] as const;
 
@@ -40,6 +40,38 @@ export const FORMSPREE_LEAD_ENDPOINT = `https://formspree.io/f/${FORMSPREE_LEAD_
 export const FORMSPREE_CONTACT_FORM_ID =
   process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID || "xreaoqpq";
 export const FORMSPREE_CONTACT_ENDPOINT = `https://formspree.io/f/${FORMSPREE_CONTACT_FORM_ID}`;
+
+/** Per-consultant Formspree form IDs – leads/contact/DS160 go to that consultant's form (Mujju = Mujaheed). */
+const FORMSPREE_LEAD_ID_YOGESH = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_YOGESH || "xvzbvqwr";
+const FORMSPREE_LEAD_ID_MOHAN = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_MOHAN || "xzdakvjp";
+const FORMSPREE_LEAD_ID_MUJAHED = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_MUJAHED || "xreaolya";
+const FORMSPREE_LEAD_ID_GENERAL = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_GENERAL_OFFICE || "mdalpdpb";
+const FORMSPREE_CONTACT_ID_YOGESH = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_YOGESH || "xvzbvqwr";
+const FORMSPREE_CONTACT_ID_MOHAN = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_MOHAN || "xzdakvjp";
+const FORMSPREE_CONTACT_ID_MUJAHED = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_MUJAHED || "xreaolya";
+const FORMSPREE_CONTACT_ID_GENERAL = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_GENERAL_OFFICE || "mdalpdpb";
+
+/** Get Formspree lead endpoint for the selected reference consultant (or default). */
+export function getFormspreeLeadEndpoint(reference?: string | null): string {
+  const id =
+    (reference === "Yogesh" && FORMSPREE_LEAD_ID_YOGESH) ||
+    (reference === "Mohan" && FORMSPREE_LEAD_ID_MOHAN) ||
+    (reference === "Mujaheed" && FORMSPREE_LEAD_ID_MUJAHED) ||
+    (reference === "General / Office" && FORMSPREE_LEAD_ID_GENERAL) ||
+    FORMSPREE_LEAD_FORM_ID;
+  return `https://formspree.io/f/${id}`;
+}
+
+/** Get Formspree contact endpoint for the selected reference consultant (or default). */
+export function getFormspreeContactEndpoint(reference?: string | null): string {
+  const id =
+    (reference === "Yogesh" && FORMSPREE_CONTACT_ID_YOGESH) ||
+    (reference === "Mohan" && FORMSPREE_CONTACT_ID_MOHAN) ||
+    (reference === "Mujaheed" && FORMSPREE_CONTACT_ID_MUJAHED) ||
+    (reference === "General / Office" && FORMSPREE_CONTACT_ID_GENERAL) ||
+    FORMSPREE_CONTACT_FORM_ID;
+  return `https://formspree.io/f/${id}`;
+}
 
 /** DS160 reference - bold notice for all users */
 export const DS160_REFERENCE = {

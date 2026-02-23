@@ -21,18 +21,20 @@ function chunkText(text: string, maxLen: number = MAX_MESSAGE_LENGTH): string[] 
   return chunks;
 }
 
+/** Normalize reference consultant to env key (e.g. "General / Office" -> "GENERAL_OFFICE") */
+function refToEnvKey(ref: string): string {
+  return ref.trim().replace(/\s+/g, "_").replace(/\//g, "_").toUpperCase();
+}
+
 /**
- * POST: send form data to Telegram as text.
- * Env: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (your chat/channel ID).
- * Body: { source?: string, data?: Record<string, unknown> } or { message?: string }.
+ * POST: send form data to Telegram. Uses consultant-specific chat when set (e.g. TELEGRAM_CHAT_ID_MOHAN).
+ * Env: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (default). Optional: TELEGRAM_CHAT_ID_YOGESH, TELEGRAM_CHAT_ID_MOHAN, etc.
  */
 export async function POST(request: NextRequest) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-
-  if (!token || !chatId) {
+  if (!token) {
     return NextResponse.json(
-      { ok: false, skipped: true, reason: "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set" },
+      { ok: false, skipped: true, reason: "TELEGRAM_BOT_TOKEN not set" },
       { status: 200 }
     );
   }
@@ -40,6 +42,20 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { source = "form", data, message: rawMessage } = body;
+
+    const ref =
+      (data?.["Reference Consultant"] ?? data?.["Reference Consultant (Whose client is this?)"]) as string | undefined;
+    const refKey = ref ? refToEnvKey(ref) : null;
+    const consultantChat =
+      refKey && process.env[`TELEGRAM_CHAT_ID_${refKey}` as keyof typeof process.env];
+    const chatId = (typeof consultantChat === "string" ? consultantChat : null) || process.env.TELEGRAM_CHAT_ID;
+
+    if (!chatId) {
+      return NextResponse.json(
+        { ok: false, skipped: true, reason: "TELEGRAM_CHAT_ID not set" },
+        { status: 200 }
+      );
+    }
 
     let text: string;
     if (typeof rawMessage === "string" && rawMessage.length > 0) {
@@ -49,7 +65,7 @@ export async function POST(request: NextRequest) {
         ([, v]) => v != null && String(v).trim() !== ""
       );
       const lines = entries.map(([k, v]) => `${k}: ${v}`);
-      text = `📋 ${String(source).toUpperCase()} submission\n\n${lines.join("\n") || "(no data)"}`;
+      text = `📋 ${String(source).toUpperCase()} submission${ref ? ` (${ref})` : ""}\n\n${lines.join("\n") || "(no data)"}`;
     }
 
     const chunks = chunkText(text);

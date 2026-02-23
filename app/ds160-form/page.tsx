@@ -10,7 +10,7 @@ import {
   DS160_FIELDS,
   DS160_FIELDS_BY_SECTION,
 } from "@/lib/ds160-fields";
-import { FORMSPREE_LEAD_ENDPOINT, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
+import { getFormspreeLeadEndpoint, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
 
 /** Build schema: every DS160 field optional string */
 const ds160SchemaShape = Object.fromEntries(
@@ -64,7 +64,9 @@ export default function DS160FormPage() {
         formspreePayload[label] = v;
       });
 
-      const res = await fetch(FORMSPREE_LEAD_ENDPOINT, {
+      const ref = data.referenceConsultant ? String(data.referenceConsultant).trim() : undefined;
+      const endpoint = getFormspreeLeadEndpoint(ref);
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formspreePayload),
@@ -74,7 +76,7 @@ export default function DS160FormPage() {
       await fetch("/api/send-to-slack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: "ds160", data }),
+        body: JSON.stringify({ source: "ds160", data: formspreePayload }),
       });
 
       await fetch("/api/send-to-telegram", {

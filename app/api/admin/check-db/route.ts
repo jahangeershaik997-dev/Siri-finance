@@ -38,7 +38,9 @@ export async function GET() {
       ok: true,
       message: "Supabase is configured and admin_users table exists.",
       admin_users_count: count ?? 0,
-      [testEmail]: user ? "User exists (you can login)" : "User NOT found – run seed: POST /api/admin/seed-super-admins with header x-seed-key: YOUR_SEED_SUPER_ADMINS_KEY",
+      [testEmail]: user
+        ? { exists: true, role: user.role, approved: user.approved, can_login: user.approved || user.role === "admin" }
+        : "User NOT found – go to /admin/setup and click Create first admin (with ADMIN_SEED_EMAIL and ADMIN_SEED_PASSWORD set in Vercel).",
     });
   } catch (e) {
     return NextResponse.json({

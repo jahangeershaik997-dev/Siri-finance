@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
-import { COMPANY, FORMSPREE_CONTACT_ENDPOINT, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
+import { COMPANY, getFormspreeContactEndpoint, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
 
 const subjects = [
@@ -36,7 +36,8 @@ export default function ContactPage() {
       _subject: `Contact: ${data.subject ?? "Enquiry"} - Wizzfly Overseas`,
     };
     try {
-      const res = await fetch(FORMSPREE_CONTACT_ENDPOINT, {
+      const endpoint = getFormspreeContactEndpoint(data.referenceConsultant);
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
