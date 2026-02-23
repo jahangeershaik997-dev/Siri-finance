@@ -14,6 +14,7 @@ export const heroFormSchema = z.object({
 });
 
 export const contactFormSchema = z.object({
+  referenceConsultant: z.string().optional(),
   name: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().optional(),

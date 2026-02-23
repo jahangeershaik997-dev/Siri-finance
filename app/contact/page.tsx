@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
-import { COMPANY, FORMSPREE_CONTACT_ENDPOINT } from "@/lib/wizzfly-constants";
+import { COMPANY, FORMSPREE_CONTACT_ENDPOINT, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
 
 const subjects = [
@@ -21,12 +21,13 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
-    defaultValues: { subject: "" },
+    defaultValues: { subject: "", referenceConsultant: "" },
   });
 
   const onSubmit = async (data: ContactFormValues) => {
     setLoading(true);
     const payload = {
+      "Reference Consultant": data.referenceConsultant ?? "",
       name: data.name ?? "",
       phone: data.phone ?? "",
       email: data.email ?? "",
@@ -79,6 +80,18 @@ export default function ContactPage() {
               Send a Message
             </h2>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium">Reference Consultant (Whose client is this?)</label>
+                <select
+                  {...form.register("referenceConsultant")}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
+                >
+                  <option value="">Select consultant</option>
+                  {REFERENCE_CONSULTANT_OPTIONS.map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+              </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">Name</label>
                 <input

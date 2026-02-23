@@ -10,6 +10,7 @@ import {
   LEAD_FORM_I_AM,
   LEAD_FORM_I_WANT,
   DS160_REFERENCE,
+  REFERENCE_CONSULTANT_OPTIONS,
 } from "@/lib/wizzfly-constants";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ const countryCodes = [
 ];
 
 const schema = z.object({
+  referenceConsultant: z.string().optional(),
   iAm: z.string().optional(),
   iWant: z.string().optional(),
   countryCode: z.string().optional(),
@@ -37,6 +39,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const defaultValues: FormData = {
+  referenceConsultant: "",
   iAm: "Student",
   iWant: "Study",
   countryCode: "+91",
@@ -61,6 +64,7 @@ export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "
   const onSubmit = async (data: FormData) => {
     setSubmitStatus("loading");
     const payload = {
+      "Reference Consultant": data.referenceConsultant ?? "",
       "I am": data.iAm ?? "",
       "I want to": data.iWant ?? "",
       Phone: data.countryCode && data.phone ? `${data.countryCode} ${data.phone}` : "",
@@ -123,6 +127,19 @@ export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "
       <h3 className="text-lg font-bold text-wizzfly-text-primary">Sign up for free expert consultation</h3>
 
       <div className="mt-4 space-y-4">
+        <div>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Reference Consultant (Whose client is this?)</label>
+          <select
+            {...register("referenceConsultant")}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-blue focus:outline-none focus:ring-1 focus:ring-primary-blue"
+          >
+            <option value="">Select consultant</option>
+            {REFERENCE_CONSULTANT_OPTIONS.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">I am</label>
           <select

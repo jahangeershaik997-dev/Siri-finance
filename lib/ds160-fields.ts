@@ -1,6 +1,7 @@
 /** DS160 form field definitions - all optional. Labels match DS-160 FORM FILLING document. */
 
 export const DS160_SECTIONS = [
+  { id: "reference", title: "REFERENCE CONSULTANT (Whose client is this?)" },
   { id: "personal1", title: "PERSONAL INFORMATION 1" },
   { id: "personal2", title: "PERSONAL INFORMATION 2" },
   { id: "travel", title: "TRAVEL INFORMATION" },
@@ -20,6 +21,7 @@ export const DS160_SECTIONS = [
 
 /** All DS160 fields: key -> label. All optional in form. */
 export const DS160_FIELDS: Record<string, string> = {
+  referenceConsultant: "REFERENCE CONSULTANT (Whose client is this?)",
   // Personal 1
   surnameAsInPassport: "SURNAME AS IN PASSPORT",
   givenNameAsInPassport: "GIVEN NAME AS IN PASSPORT",
@@ -189,6 +191,7 @@ export const DS160_FIELDS: Record<string, string> = {
 
 /** Map section id to field keys for grouping form */
 export const DS160_FIELDS_BY_SECTION: Record<string, string[]> = {
+  reference: ["referenceConsultant"],
   personal1: ["surnameAsInPassport", "givenNameAsInPassport", "haveYouUsedOtherNames", "sex", "dateOfBirth", "maritalStatus", "placeOfBirth"],
   personal2: ["nationality", "otherNationality", "nationalIdNumber", "usSocialSecurityNumber", "usTaxpayerIdNumber"],
   travel: ["principleApplicantCategory", "purposeOfTripToUS", "intendedDateOfArrival", "intendedLengthOfStay", "addressWhereYouWillStayInUS", "phoneNumber", "emailId", "personPayingForTrip", "relationshipToYou"],

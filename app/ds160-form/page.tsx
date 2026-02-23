@@ -10,7 +10,7 @@ import {
   DS160_FIELDS,
   DS160_FIELDS_BY_SECTION,
 } from "@/lib/ds160-fields";
-import { FORMSPREE_LEAD_ENDPOINT } from "@/lib/wizzfly-constants";
+import { FORMSPREE_LEAD_ENDPOINT, REFERENCE_CONSULTANT_OPTIONS } from "@/lib/wizzfly-constants";
 
 /** Build schema: every DS160 field optional string */
 const ds160SchemaShape = Object.fromEntries(
@@ -49,11 +49,15 @@ export default function DS160FormPage() {
   const onSubmit = async (data: FormData) => {
     setStatus("loading");
     try {
-      // Build Formspree payload with human-readable labels so you get all details as-is in email/dashboard
+      // Build Formspree payload with human-readable labels; put Reference Consultant first so it shows at top
       const formspreePayload: Record<string, string> = {
         _subject: "DS160 Form Submission - Wizzfly",
       };
+      if (data.referenceConsultant != null && String(data.referenceConsultant).trim() !== "") {
+        formspreePayload["Reference Consultant (Whose client is this?)"] = String(data.referenceConsultant).trim();
+      }
       Object.entries(data).forEach(([key, value]) => {
+        if (key === "referenceConsultant") return;
         const v = value == null ? "" : String(value).trim();
         if (v === "") return;
         const label = DS160_FIELDS[key] ?? key;
@@ -157,11 +161,23 @@ export default function DS160FormPage() {
                       <label className="mb-1 block text-sm font-medium text-gray-700">
                         {DS160_FIELDS[key]}
                       </label>
-                      <input
-                        {...form.register(key)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900"
-                        placeholder=""
-                      />
+                      {key === "referenceConsultant" ? (
+                        <select
+                          {...form.register(key)}
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900"
+                        >
+                          <option value="">Select consultant</option>
+                          {REFERENCE_CONSULTANT_OPTIONS.map((name) => (
+                            <option key={name} value={name}>{name}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          {...form.register(key)}
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900"
+                          placeholder=""
+                        />
+                      )}
                     </div>
                   ))}
                 </div>

@@ -23,6 +23,14 @@ export const SENIOR_CONSULTANTS = [
   { name: "Eshwar", phone: "7013193257", whatsapp: "917013193257", phone2: "9010018469", email: "", role: "Senior Consultant" },
 ];
 
+/** Reference consultant options for all forms – shows in Formspree/Telegram so you know whose client it is */
+export const REFERENCE_CONSULTANT_OPTIONS = [
+  "Yogesh",
+  "Mohan",
+  "Eshwar",
+  "General / Office",
+] as const;
+
 /** Formspree endpoint for Application/Lead form (from Formspree dashboard) */
 export const FORMSPREE_LEAD_FORM_ID =
   process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID || "xreaoqpq";
