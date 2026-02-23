@@ -4,14 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
-import { COMPANY, COMPANY_EMAIL_RECIPIENT, FORMSPREE_CONTACT_ENDPOINT } from "@/lib/constants";
+import { COMPANY, FORMSPREE_CONTACT_ENDPOINT } from "@/lib/wizzfly-constants";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
 
 const subjects = [
   "General Enquiry",
-  "Loan Enquiry",
-  "Complaint",
-  "Partnership",
+  "Visa Enquiry",
+  "Study Abroad",
+  "Work Visa",
+  "PR / Migration",
+  "DS160 / Form Assistance",
   "Other",
 ];
 
@@ -25,7 +27,6 @@ export default function ContactPage() {
   const onSubmit = async (data: ContactFormValues) => {
     setLoading(true);
     try {
-      // Formspree: messages go to your Formspree dashboard (and email if you set it in Formspree)
       const res = await fetch(FORMSPREE_CONTACT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,37 +36,11 @@ export default function ContactPage() {
           email: data.email || "",
           subject: data.subject,
           message: data.message,
-          _subject: `Contact: ${data.subject} - Siri Finance`,
+          _subject: `Contact: ${data.subject} - Wizzfly Overseas`,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to send");
-      await fetch("/api/submissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          formType: "contact",
-          data: {
-            name: data.name,
-            phone: data.phone,
-            email: data.email || "",
-            subject: data.subject,
-            message: data.message,
-          },
-        }),
-      }).catch(() => {});
-      // Also send to WhatsApp (if CallMeBot is set up)
-      const whatsappMsg = `*Contact Form - Siri Finance*\nName: ${data.name}\nPhone: ${data.phone}\nSubject: ${data.subject}\nMessage: ${data.message}`;
-      fetch("/api/send-to-whatsapp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: whatsappMsg }),
-      })
-        .then((r) => r.json())
-        .then((body) => {
-          if (body.skipped || !body.success) console.warn("[WhatsApp]", body.skipped ? "Skipped (set CALLMEBOT_API_KEY in Vercel/env)" : body.error);
-        })
-        .catch(() => {});
       toast.success("Message sent. We will get back to you soon!");
       form.reset();
     } catch (e) {
@@ -76,17 +51,20 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-sfs-bg-light py-12 md:py-16">
+    <div className="bg-wizzfly-bg-light py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-poppins text-3xl font-bold text-sfs-text-primary">
+        <h1 className="font-poppins text-3xl font-bold text-wizzfly-text-primary">
           Contact Us
         </h1>
-        <p className="mt-2 text-sfs-text-secondary">
-          Get in touch for loan enquiries or any assistance.
+        <p className="mt-2 text-wizzfly-text-secondary">
+          Get in touch for visa, immigration, or overseas education enquiries.
+        </p>
+        <p className="mt-2 text-sm font-bold text-wizzfly-text-primary">
+          <strong>While filling DS160 form please refer this—contact us for the DS160 FORM by team. (Accessible for all.)</strong>
         </p>
         <div className="mt-10 grid gap-10 lg:grid-cols-2">
-          <div className="rounded-card border border-gray-200 bg-white p-6 shadow-soft">
-            <h2 className="font-poppins text-xl font-bold text-sfs-text-primary">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="font-poppins text-xl font-bold text-wizzfly-text-primary">
               Send a Message
             </h2>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
@@ -94,7 +72,7 @@ export default function ContactPage() {
                 <label className="mb-1 block text-sm font-medium">Name *</label>
                 <input
                   {...form.register("name")}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
                 />
                 {form.formState.errors.name && (
                   <p className="mt-1 text-sm text-red-600">{form.formState.errors.name.message}</p>
@@ -106,7 +84,7 @@ export default function ContactPage() {
                   {...form.register("phone")}
                   type="tel"
                   maxLength={10}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
                 />
                 {form.formState.errors.phone && (
                   <p className="mt-1 text-sm text-red-600">{form.formState.errors.phone.message}</p>
@@ -117,14 +95,14 @@ export default function ContactPage() {
                 <input
                   {...form.register("email")}
                   type="email"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
                 />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">Subject *</label>
                 <select
                   {...form.register("subject")}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
                 >
                   <option value="">Select...</option>
                   {subjects.map((s) => (
@@ -140,7 +118,7 @@ export default function ContactPage() {
                 <textarea
                   {...form.register("message")}
                   rows={4}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
                 />
                 {form.formState.errors.message && (
                   <p className="mt-1 text-sm text-red-600">{form.formState.errors.message.message}</p>
@@ -149,34 +127,39 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-lg bg-primary-red py-3 font-semibold text-white disabled:opacity-70"
+                className="w-full rounded-lg bg-primary-orange py-3 font-semibold text-white transition hover:bg-orange-600 disabled:opacity-70"
               >
                 {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
           <div>
-            <div className="rounded-card border border-gray-200 bg-white p-6 shadow-soft">
-              <h2 className="font-poppins text-xl font-bold text-sfs-text-primary">
+            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="font-poppins text-xl font-bold text-wizzfly-text-primary">
                 Office & Contact
               </h2>
-              <p className="mt-4 text-sfs-text-secondary">{COMPANY.address}</p>
+              <p className="mt-4 text-wizzfly-text-secondary">{COMPANY.address}</p>
               <p className="mt-2">
-                <a href={`tel:${COMPANY.phone}`} className="font-medium text-primary-red">
-                  {COMPANY.phone}
+                <a href={`tel:+91${COMPANY.phone}`} className="font-medium text-primary-blue hover:underline">
+                  +91 {COMPANY.phone}
                 </a>
               </p>
               <p className="mt-2">
-                <a href={`mailto:${COMPANY_EMAIL_RECIPIENT}`} className="text-primary-blue underline">
+                <a href={`mailto:${COMPANY.email}`} className="text-primary-blue underline hover:no-underline">
                   {COMPANY.email}
                 </a>
               </p>
-              <p className="mt-2 text-sm text-sfs-text-secondary">{COMPANY.hours}</p>
+              <p className="mt-2">
+                <a href={`https://wa.me/${COMPANY.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline">
+                  WhatsApp
+                </a>
+              </p>
+              <p className="mt-2 text-sm text-wizzfly-text-secondary">{COMPANY.hours}</p>
             </div>
-            <div className="mt-6 overflow-hidden rounded-card border border-gray-200 bg-white shadow-soft">
+            <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
               <iframe
-                title="Office location"
-                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.585678789!2d78.446!3d17.4375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDI2JzE1LjAiTiA3OMKwMjYnNDUuOSJF!5e0!3m2!1sen!2sin!4v1`}
+                title="Wizzfly Overseas - Hyderabad"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.585678789!2d78.4867!3d17.385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99dac93a333d%3A0xc4242849b24b84!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1635000000000!5m2!1sen!2sin"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}

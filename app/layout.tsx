@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { FloatingButtons } from "@/components/layout/FloatingButtons";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { FloatingCTA } from "@/components/FloatingCTA";
+import { CookieConsent } from "@/components/CookieConsent";
 import { Toaster } from "sonner";
-import { COMPANY, SITE_URL } from "@/lib/constants";
+import { COMPANY, SITE_URL } from "@/lib/wizzfly-constants";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 
 const poppins = Poppins({
@@ -23,22 +24,24 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Siri Financial Services | Loans, Home Loan, Personal Loan in Hyderabad",
-    template: "%s | Siri Financial Services",
+    default: "Best Immigration Consultants in Hyderabad | Wizzfly Overseas",
+    template: "%s | Wizzfly Overseas",
   },
   description:
-    "Siri Financial Services - Your trusted partner for personal loans, home loans, business loans, and more in Hyderabad. Best interest rates from 10+ banks. CIBIL issues? We can help!",
+    "Wizzfly Overseas - Best visa consultants in Hyderabad. Visa consultants Hyderabad, immigration consultants Hyderabad, overseas education consultants. Your wings to the world.",
   keywords: [
-    "personal loan Hyderabad",
-    "home loan Hyderabad",
-    "business loan",
-    "Siri Financial Services",
-    "loan Ameerpet",
-    "CIBIL loan",
+    "visa consultants hyderabad",
+    "immigration consultants hyderabad",
+    "overseas education consultants",
+    "Wizzfly Overseas",
+    "study abroad hyderabad",
+    "PR visa consultants",
   ],
   openGraph: {
     type: "website",
     locale: "en_IN",
+    title: "Best Immigration Consultants in Hyderabad | Wizzfly Overseas",
+    description: "Visa consultants Hyderabad, immigration consultants Hyderabad, overseas education consultants. Your wings to the world.",
   },
   robots: {
     index: true,
@@ -55,14 +58,11 @@ export default function RootLayout({
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#E53935" />
+        <meta name="theme-color" content="#1a56db" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="SFS" />
+        <meta name="apple-mobile-web-app-title" content="Wizzfly Overseas" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-152x152.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -70,30 +70,30 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: COMPANY.name,
+              description: COMPANY.tagline,
               image: `${SITE_URL}/images/logo-og.png`,
               address: {
                 "@type": "PostalAddress",
-                streetAddress: COMPANY.address,
-                addressLocality: "Ameerpet",
+                addressLocality: "Hyderabad",
                 addressRegion: "Telangana",
-                postalCode: "500016",
                 addressCountry: "IN",
               },
               telephone: `+91${COMPANY.phone}`,
               email: COMPANY.email,
               openingHours: "Mo-Sa 09:30-18:30",
-              priceRange: "₹₹",
+              url: SITE_URL,
             }),
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col antialiased scroll-smooth">
         <SessionProvider>
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <FloatingButtons />
-        <Toaster position="top-center" richColors closeButton />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingCTA />
+          <CookieConsent />
+          <Toaster position="top-center" richColors closeButton />
         </SessionProvider>
       </body>
     </html>

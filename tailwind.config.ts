@@ -11,9 +11,19 @@ const config: Config = {
       colors: {
         primary: {
           red: "#E53935",
-          blue: "#1565C0",
+          blue: "#1a56db",
+          "blue-deep": "#1a56db",
           green: "#2E7D32",
-          orange: "#FF6F00",
+          orange: "#f97316",
+        },
+        wizzfly: {
+          blue: "#1a56db",
+          orange: "#f97316",
+          navy: "#0f172a",
+          dark: "#0D1B3E",
+          "text-primary": "#1A1A1A",
+          "text-secondary": "#555555",
+          "bg-light": "#F8F9FA",
         },
         sfs: {
           dark: "#0D1B3E",
@@ -27,7 +37,8 @@ const config: Config = {
         inter: ["var(--font-inter)", "sans-serif"],
       },
       backgroundImage: {
-        "gradient-hero": "linear-gradient(135deg, #E53935, #FF6F00)",
+        "gradient-hero": "linear-gradient(135deg, #1a56db, #0f172a)",
+        "gradient-hero-wizzfly": "linear-gradient(135deg, #1a56db 0%, #0f172a 100%)",
         "gradient-trust": "linear-gradient(135deg, #1565C0, #2E7D32)",
       },
       borderRadius: {

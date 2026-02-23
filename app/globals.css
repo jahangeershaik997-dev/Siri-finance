@@ -4,9 +4,12 @@
 
 :root {
   --primary-red: #e53935;
-  --primary-blue: #1565c0;
+  --primary-blue: #1a56db;
   --primary-green: #2e7d32;
-  --primary-orange: #ff6f00;
+  --primary-orange: #f97316;
+  --wizzfly-blue: #1a56db;
+  --wizzfly-orange: #f97316;
+  --wizzfly-navy: #0f172a;
   --sfs-dark: #0d1b3e;
   --text-primary: #1a1a1a;
   --text-secondary: #555555;
@@ -14,7 +17,7 @@
 }
 
 body {
-  @apply font-inter text-sfs-text-primary antialiased;
+  @apply font-inter text-wizzfly-text-primary antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {

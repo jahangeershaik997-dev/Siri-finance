@@ -1,26 +1,31 @@
-import { Hero } from "@/components/home/Hero";
-import { TrustBanner } from "@/components/home/TrustBanner";
-import { Services } from "@/components/home/Services";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
-import { HowItWorks } from "@/components/home/HowItWorks";
-import { EMICalculator } from "@/components/home/EMICalculator";
-import { Testimonials } from "@/components/home/Testimonials";
-import { ContactStrip } from "@/components/home/ContactStrip";
+import { Hero } from "@/components/Hero";
+import { DS160Notice } from "@/components/DS160Notice";
+import { About } from "@/components/About";
+import { Services } from "@/components/Services";
+import { Countries } from "@/components/Countries";
+import { CountryTabs } from "@/components/CountryTabs";
+import { Coaching } from "@/components/Coaching";
+import { VisaTypes } from "@/components/VisaTypes";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { Testimonials } from "@/components/Testimonials";
+import { ContactCTA } from "@/components/ContactCTA";
 
-// Avoid static prerender so framer-motion works at build time
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <TrustBanner />
+      <DS160Notice />
+      <About />
       <Services />
+      <Countries />
+      <CountryTabs />
+      <Coaching />
+      <VisaTypes />
       <WhyChooseUs />
-      <HowItWorks />
-      <EMICalculator />
       <Testimonials />
-      <ContactStrip />
+      <ContactCTA />
     </>
   );
 }
