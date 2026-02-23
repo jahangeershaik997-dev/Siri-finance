@@ -16,8 +16,18 @@ export const COMPANY = {
   mapCoords: { lat: 17.385, lng: 78.4867 },
 };
 
+/** Senior consultant row – phone/whatsapp/email are strings for display and links. */
+export type SeniorConsultant = {
+  name: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  role: string;
+  phone2?: string;
+};
+
 /** Senior consultants / advisors - Call or WhatsApp (all 4 shown on homepage). Mujju = Mujaheed. */
-export const SENIOR_CONSULTANTS = [
+export const SENIOR_CONSULTANTS: SeniorConsultant[] = [
   { name: "Yogesh", phone: "9603434162", whatsapp: "919603434162", email: "yogeshvishwakarma959@gmail.com", role: "Senior Consultant" },
   { name: "Mohan", phone: "7097427161", whatsapp: "917097427161", email: "mohankanna51@gmail.com", role: "Senior Advisor" },
   { name: "Mujaheed", phone: COMPANY.phone, whatsapp: COMPANY.whatsapp, email: COMPANY.email, role: "Senior Consultant" },

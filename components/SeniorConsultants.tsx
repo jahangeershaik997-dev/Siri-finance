@@ -44,21 +44,21 @@ export function SeniorConsultants() {
               </div>
               <div className="mt-4 space-y-2">
                 <a
-                  href={`tel:+91${c.phone}`}
+                  href={`tel:+91${String(c.phone)}`}
                   className="flex items-center gap-2 text-sm font-medium text-wizzfly-text-primary hover:text-primary-blue"
                 >
-                  📞 +91 {c.phone}
+                  📞 +91 {String(c.phone)}
                 </a>
                 {"phone2" in c && c.phone2 && (
                   <a
-                    href={`tel:+91${c.phone2}`}
+                    href={`tel:+91${String(c.phone2)}`}
                     className="flex items-center gap-2 text-sm font-medium text-wizzfly-text-primary hover:text-primary-blue"
                   >
-                    📞 +91 {c.phone2}
+                    📞 +91 {String(c.phone2)}
                   </a>
                 )}
                 <a
-                  href={`https://wa.me/${c.whatsapp}`}
+                  href={`https://wa.me/${String(c.whatsapp)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm font-medium text-[#25D366] hover:underline"
@@ -67,10 +67,10 @@ export function SeniorConsultants() {
                 </a>
                 {c.email && (
                   <a
-                    href={`mailto:${c.email}`}
+                    href={`mailto:${String(c.email)}`}
                     className="flex items-center gap-2 text-sm font-medium text-wizzfly-text-primary hover:text-primary-blue"
                   >
-                    ✉️ {c.email}
+                    ✉️ {String(c.email)}
                   </a>
                 )}
               </div>
