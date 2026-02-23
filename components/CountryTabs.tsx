@@ -6,7 +6,7 @@ import { COUNTRY_TABS, VISA_TYPES_PER_COUNTRY } from "@/lib/wizzfly-constants";
 import { cn } from "@/lib/utils";
 
 export function CountryTabs() {
-  const [activeTab, setActiveTab] = useState(COUNTRY_TABS[0]);
+  const [activeTab, setActiveTab] = useState<(typeof COUNTRY_TABS)[number]>(COUNTRY_TABS[0]);
 
   return (
     <section id="country-services" className="scroll-mt-20 bg-white py-16 sm:py-20">
