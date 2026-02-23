@@ -13,13 +13,13 @@ export function DS160Notice() {
           </strong>
         </p>
         <Link
-          href="/resources"
+          href="/ds160-form"
           className="mt-4 inline-block rounded-xl bg-green-600 px-8 py-4 text-lg font-bold text-white shadow-lg transition hover:bg-green-700 focus:outline focus:ring-4 focus:ring-green-400"
         >
           DS160 Form — Fill All Required Fields
         </Link>
         <p className="mt-3 text-sm text-wizzfly-text-secondary">
-          Download the DS160 FORM by team and get help filling every required field.{" "}
+          Fill the form online, then download your data or get the form.{" "}
           <Link href="/contact" className="text-primary-blue font-medium hover:underline">
             Contact us
           </Link>{" "}

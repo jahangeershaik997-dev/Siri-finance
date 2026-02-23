@@ -33,21 +33,21 @@ export default function ResourcesPage() {
           Download forms and guides by country. Country flag is shown next to each file name.
         </motion.p>
 
-        {/* Big green DS160 button - fill all required fields */}
+        {/* Big green DS160 button - opens fillable form */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
           className="mt-6"
         >
-          <a
-            href="#file-list"
+          <Link
+            href="/ds160-form"
             className="inline-block rounded-xl bg-green-600 px-8 py-4 text-lg font-bold text-white shadow-lg transition hover:bg-green-700 focus:outline focus:ring-4 focus:ring-green-400"
           >
             DS160 Form — Fill All Required Fields
-          </a>
+          </Link>
           <p className="mt-2 text-sm text-wizzfly-text-secondary">
-            Download the DS160 FORM by team and fill every required field in the document.
+            Fill the form online, then download your data or get the form from our team.
           </p>
         </motion.div>
 
