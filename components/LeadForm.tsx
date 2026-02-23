@@ -35,21 +35,20 @@ const schema = z.object({
   phone: z.string().min(10, "Valid 10-digit phone required"),
   email: z.string().email("Valid email required"),
   whatsapp: z.boolean().optional(),
-  terms: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
+  terms: z.boolean().refine((val) => val === true, { message: "You must accept the terms" }),
 });
 
 type FormData = z.infer<typeof schema>;
 
-/** Initial form state; terms must be true only on submit (schema validates). */
-const defaultValues = {
-  iAm: "Student" as const,
-  iWant: "Study" as const,
+const defaultValues: FormData = {
+  iAm: "Student",
+  iWant: "Study",
   countryCode: "+91",
   phone: "",
   email: "",
   whatsapp: false,
   terms: false,
-} as FormData;
+};
 
 export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "sticky"; className?: string }) {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
