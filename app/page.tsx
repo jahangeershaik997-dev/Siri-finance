@@ -7,6 +7,7 @@ import { CountryTabs } from "@/components/CountryTabs";
 import { Coaching } from "@/components/Coaching";
 import { VisaTypes } from "@/components/VisaTypes";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { SeniorConsultants } from "@/components/SeniorConsultants";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactCTA } from "@/components/ContactCTA";
 
@@ -24,6 +25,7 @@ export default function HomePage() {
       <Coaching />
       <VisaTypes />
       <WhyChooseUs />
+      <SeniorConsultants />
       <Testimonials />
       <ContactCTA />
     </>

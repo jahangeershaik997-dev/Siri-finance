@@ -4,8 +4,9 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://wizzflyoverseas.com";
 
 export const COMPANY = {
-  name: "Wizzfly Overseas",
+  name: "Whizzfly Overseas",
   tagline: "Your Wings to the World",
+  studyAbroad: "STUDY ABROAD",
   phone: "7794920021",
   whatsapp: "917794920021",
   email: "Syed.mujaheedsm77949@gmail.com",
@@ -14,6 +15,13 @@ export const COMPANY = {
   hours: "Mon-Sat 9:30 AM - 6:30 PM",
   mapCoords: { lat: 17.385, lng: 78.4867 },
 };
+
+/** Senior consultants / advisors - Call or WhatsApp */
+export const SENIOR_CONSULTANTS = [
+  { name: "Yogesh", phone: "9603434162", whatsapp: "919603434162", email: "yogeshvishwakarma959@gmail.com", role: "Senior Consultant" },
+  { name: "Mohan", phone: "7097427161", whatsapp: "917097427161", email: "mohankanna51@gmail.com", role: "Senior Advisor" },
+  { name: "Eshwar", phone: "7013193257", whatsapp: "917013193257", phone2: "9010018469", email: "", role: "Senior Consultant" },
+];
 
 /** Formspree endpoint for Application/Lead form (from Formspree dashboard) */
 export const FORMSPREE_LEAD_FORM_ID =

@@ -76,14 +76,21 @@ export function Header() {
         )}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Wizzfly Overseas Home">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-blue text-white">
+          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Whizzfly Overseas Home">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-blue text-white">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3 21h18l-3-9M6 12l3-9 3 9M6 12h12" />
               </svg>
             </span>
-            <span className="hidden font-poppins text-lg font-bold text-wizzfly-text-primary sm:block">
-              {COMPANY.name}
+            <span className="hidden sm:block">
+              <span className="block font-poppins text-lg font-bold leading-tight text-wizzfly-text-primary">
+                {COMPANY.name}
+              </span>
+              {COMPANY.studyAbroad && (
+                <span className="block text-xs font-semibold uppercase tracking-wide text-primary-orange">
+                  {COMPANY.studyAbroad}
+                </span>
+              )}
             </span>
           </Link>
 

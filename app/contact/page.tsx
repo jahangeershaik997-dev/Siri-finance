@@ -26,21 +26,32 @@ export default function ContactPage() {
 
   const onSubmit = async (data: ContactFormValues) => {
     setLoading(true);
+    const payload = {
+      name: data.name ?? "",
+      phone: data.phone ?? "",
+      email: data.email ?? "",
+      subject: data.subject ?? "",
+      message: data.message ?? "",
+      _subject: `Contact: ${data.subject ?? "Enquiry"} - Wizzfly Overseas`,
+    };
     try {
       const res = await fetch(FORMSPREE_CONTACT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          phone: data.phone,
-          email: data.email || "",
-          subject: data.subject,
-          message: data.message,
-          _subject: `Contact: ${data.subject} - Wizzfly Overseas`,
-        }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to send");
+      await fetch("/api/send-to-slack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "contact", data: payload }),
+      });
+      await fetch("/api/send-to-telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "contact", data: payload }),
+      }).catch(() => {});
       toast.success("Message sent. We will get back to you soon!");
       form.reset();
     } catch (e) {
@@ -69,7 +80,7 @@ export default function ContactPage() {
             </h2>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium">Name *</label>
+                <label className="mb-1 block text-sm font-medium">Name</label>
                 <input
                   {...form.register("name")}
                   className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
@@ -79,7 +90,7 @@ export default function ContactPage() {
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Phone *</label>
+                <label className="mb-1 block text-sm font-medium">Phone</label>
                 <input
                   {...form.register("phone")}
                   type="tel"
@@ -99,7 +110,7 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Subject *</label>
+                <label className="mb-1 block text-sm font-medium">Subject</label>
                 <select
                   {...form.register("subject")}
                   className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
@@ -114,7 +125,7 @@ export default function ContactPage() {
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Message *</label>
+                <label className="mb-1 block text-sm font-medium">Message</label>
                 <textarea
                   {...form.register("message")}
                   rows={4}

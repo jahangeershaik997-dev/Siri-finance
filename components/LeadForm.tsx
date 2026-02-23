@@ -25,17 +25,13 @@ const countryCodes = [
 ];
 
 const schema = z.object({
-  iAm: z.enum(["Student", "Working Professional", "Business Owner"], {
-    required_error: "Please select",
-  }),
-  iWant: z.enum(["Migrate", "Work", "Study", "Visit", "Invest"], {
-    required_error: "Please select",
-  }),
-  countryCode: z.string().min(1, "Required"),
-  phone: z.string().min(10, "Valid 10-digit phone required"),
-  email: z.string().email("Valid email required"),
+  iAm: z.string().optional(),
+  iWant: z.string().optional(),
+  countryCode: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
   whatsapp: z.boolean().optional(),
-  terms: z.boolean().refine((val) => val === true, { message: "You must accept the terms" }),
+  terms: z.boolean().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -64,19 +60,30 @@ export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "
 
   const onSubmit = async (data: FormData) => {
     setSubmitStatus("loading");
+    const payload = {
+      "I am": data.iAm ?? "",
+      "I want to": data.iWant ?? "",
+      Phone: data.countryCode && data.phone ? `${data.countryCode} ${data.phone}` : "",
+      Email: data.email ?? "",
+      "Contact on WhatsApp": data.whatsapp ? "Yes" : "No",
+      _subject: `Whizzfly Lead: ${data.iAm ?? ""} - ${data.iWant ?? ""}`,
+    };
     try {
       const res = await fetch(FORMSPREE_LEAD_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          "I am": data.iAm,
-          "I want to": data.iWant,
-          Phone: `${data.countryCode} ${data.phone}`,
-          Email: data.email,
-          "Contact on WhatsApp": data.whatsapp ? "Yes" : "No",
-          _subject: `Wizzfly Lead: ${data.iAm} - ${data.iWant}`,
-        }),
+        body: JSON.stringify(payload),
       });
+      await fetch("/api/send-to-slack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "lead", data: payload }),
+      }).catch(() => {});
+      await fetch("/api/send-to-telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "lead", data: payload }),
+      }).catch(() => {});
       if (res.ok) {
         setSubmitStatus("success");
       } else {

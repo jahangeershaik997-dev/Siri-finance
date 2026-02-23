@@ -14,11 +14,11 @@ export const heroFormSchema = z.object({
 });
 
 export const contactFormSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  phone: z.string().regex(indianMobileRegex, "Valid 10-digit mobile required"),
-  email: z.string().email("Valid email required").optional().or(z.literal("")),
-  subject: z.string().min(1, "Select subject"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
+  subject: z.string().optional(),
+  message: z.string().optional(),
 });
 
 const step1BaseSchema = z.object({
