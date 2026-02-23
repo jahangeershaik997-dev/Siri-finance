@@ -40,15 +40,16 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const defaultValues: FormData = {
-  iAm: "Student",
-  iWant: "Study",
+/** Initial form state; terms must be true only on submit (schema validates). */
+const defaultValues = {
+  iAm: "Student" as const,
+  iWant: "Study" as const,
   countryCode: "+91",
   phone: "",
   email: "",
   whatsapp: false,
   terms: false,
-};
+} as FormData;
 
 export function LeadForm({ variant = "hero", className }: { variant?: "hero" | "sticky"; className?: string }) {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
