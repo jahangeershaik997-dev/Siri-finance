@@ -39,6 +39,9 @@ export const REFERENCE_CONSULTANT_OPTIONS = [
   "Yogesh",
   "Mohan",
   "Mujaheed",
+  "Eshwar",
+  "Vineeth",
+  "Jahangeer",
   "General / Office",
 ] as const;
 
@@ -56,10 +59,16 @@ const FORMSPREE_LEAD_ID_YOGESH = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_
 const FORMSPREE_LEAD_ID_MOHAN = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_MOHAN || "xzdakvjp";
 const FORMSPREE_LEAD_ID_MUJAHED = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_MUJAHED || "xreaolya";
 const FORMSPREE_LEAD_ID_GENERAL = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_GENERAL_OFFICE || "mdalpdpb";
+const FORMSPREE_LEAD_ID_ESHWAR = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_ESHWAR || FORMSPREE_LEAD_ID_GENERAL;
+const FORMSPREE_LEAD_ID_VINEETH = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_VINEETH || FORMSPREE_LEAD_ID_GENERAL;
+const FORMSPREE_LEAD_ID_JAHANGEER = process.env.NEXT_PUBLIC_FORMSPREE_LEAD_FORM_ID_JAHANGEER || FORMSPREE_LEAD_ID_GENERAL;
 const FORMSPREE_CONTACT_ID_YOGESH = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_YOGESH || "xvzbvqwr";
 const FORMSPREE_CONTACT_ID_MOHAN = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_MOHAN || "xzdakvjp";
 const FORMSPREE_CONTACT_ID_MUJAHED = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_MUJAHED || "xreaolya";
 const FORMSPREE_CONTACT_ID_GENERAL = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_GENERAL_OFFICE || "mdalpdpb";
+const FORMSPREE_CONTACT_ID_ESHWAR = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_ESHWAR || FORMSPREE_CONTACT_ID_GENERAL;
+const FORMSPREE_CONTACT_ID_VINEETH = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_VINEETH || FORMSPREE_CONTACT_ID_GENERAL;
+const FORMSPREE_CONTACT_ID_JAHANGEER = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_FORM_ID_JAHANGEER || FORMSPREE_CONTACT_ID_GENERAL;
 
 /** Get Formspree lead endpoint for the selected reference consultant (or default). */
 export function getFormspreeLeadEndpoint(reference?: string | null): string {
@@ -67,6 +76,9 @@ export function getFormspreeLeadEndpoint(reference?: string | null): string {
     (reference === "Yogesh" && FORMSPREE_LEAD_ID_YOGESH) ||
     (reference === "Mohan" && FORMSPREE_LEAD_ID_MOHAN) ||
     (reference === "Mujaheed" && FORMSPREE_LEAD_ID_MUJAHED) ||
+    (reference === "Eshwar" && FORMSPREE_LEAD_ID_ESHWAR) ||
+    (reference === "Vineeth" && FORMSPREE_LEAD_ID_VINEETH) ||
+    (reference === "Jahangeer" && FORMSPREE_LEAD_ID_JAHANGEER) ||
     (reference === "General / Office" && FORMSPREE_LEAD_ID_GENERAL) ||
     FORMSPREE_LEAD_FORM_ID;
   return `https://formspree.io/f/${id}`;
@@ -78,6 +90,9 @@ export function getFormspreeContactEndpoint(reference?: string | null): string {
     (reference === "Yogesh" && FORMSPREE_CONTACT_ID_YOGESH) ||
     (reference === "Mohan" && FORMSPREE_CONTACT_ID_MOHAN) ||
     (reference === "Mujaheed" && FORMSPREE_CONTACT_ID_MUJAHED) ||
+    (reference === "Eshwar" && FORMSPREE_CONTACT_ID_ESHWAR) ||
+    (reference === "Vineeth" && FORMSPREE_CONTACT_ID_VINEETH) ||
+    (reference === "Jahangeer" && FORMSPREE_CONTACT_ID_JAHANGEER) ||
     (reference === "General / Office" && FORMSPREE_CONTACT_ID_GENERAL) ||
     FORMSPREE_CONTACT_FORM_ID;
   return `https://formspree.io/f/${id}`;
